@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" Password="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" Password="ie=edge">
+    <title>登录页</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        body {
+            width: 90%;
+            margin: 20px auto;
+            padding: 0 0 200px;
+        }
+        
+        header {
+            border-bottom: 1px solid #808080b8;
+        }
+        
+        h6 span,
+        h6 a {
+            color: #00000070;
+        }
+        
+        article {
+            padding: 10px 0;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>登录</h1>
+    </header>
+    <article>
+        <form>
+            <div class="form-group">
+                <label for="inputUsername">用户名</label>
+                <input type="text" class="form-control" id="inputUsername" aria-describedby="UsernameHelp" placeholder="Enter Username" name="username" />
+            </div>
+            <div class="form-group">
+                <label for="inputPassword">密码</label>
+                <input class="form-control" type="password" id="inputPassword" placeholder="Password" name="password" />
+            </div>
+            <button type="submit" id="login" class="btn btn-primary">保存</button>
+        </form>
+    </article>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    </script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+    <script>
+        $('form').on('submit', function(e) {
+            console.log(e, $("form").serializeArray())
+            let username = $('#inputUsername').val()
+            let password = $('#inputPassword').val()
+            $.ajax({
+                url: 'http://localhost:8080/api/user/login',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    username: username,
+                    password: password
+                }),
+                success: res => {
+                    console.log(res)
+                    location.href = 'admin.html'
+                }
+            })
+            return false
+        })
+    </script>
+</body>
+
+</html>
