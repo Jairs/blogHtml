@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>管理中心</title>
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <style>
+        body {
+            width: 90%;
+            margin: 20px auto;
+            padding: 0 0 200px;
+        }
+        
+        header {
+            border-bottom: 1px solid #808080b8;
+        }
+        
+        h6 span,
+        h6 a {
+            color: #00000070;
+        }
+        
+        article {
+            padding: 10px 0;
+            font-weight: bold;
+        }
+        
+        .delete {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>管理中心</h1>
+    </header>
+    <article>
+        <a href="new.html">新建博客</a>
+        <form class="form-inline">
+            <div class="form-group">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="keyword" placeholder="">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">搜索</button>
+        </form>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>博客标题</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </article>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    </script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+    <script>
+        $('form').on('submit', function() {
+            let keyword = $('#keyword').val()
+            getList(keyword)
+            return false
+        })
+
+        function getList(keyword = null) {
+            $.ajax({
+                url: 'http://localhost:8080/api/blog/list',
+                data: {
+                    author: getQueryString('author'),
+                    keyword: keyword
+                },
+                success: res => {
+                    if (res.errno === 0) {
+                        data = res.data
+                        let elements = ''
+                        data.forEach(ele => {
+                            elements += `<tr id="tr_${ele.id}">
+                            <td class="title"><a href="detail.html?id=${ele.id}">${ele.title}</a></td>
+                            <td>
+                                <a href="edit.html?id=${ele.id}">编辑</a>
+                                <span class="delete" onclick=delBlog(${ele.id})>删除</span>
+                            </td>
+                        </tr>`
+                        });
+                        $('tbody').html(elements)
+                    }
+                }
+            })
+        }
+
+        function delBlog(id) {
+            $.ajax({
+                url: `http://localhost:8080/api/blog/del?id=${id}`,
+                type: 'POST',
+                success: res => {
+                    console.log(res)
+                    if (res.errno === 0) {
+                        $(`#tr_${id}`).remove()
+                    }
+                }
+            })
+        }
+
+        function getQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return decodeURI(r[2]);
+            return null;
+        }
+        getList()
+    </script>
+</body>
+
+</html>
