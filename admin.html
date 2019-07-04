@@ -74,7 +74,7 @@
 
         function getList(keyword = null) {
             $.ajax({
-                url: 'http://localhost:8080/api/blog/list',
+                url: 'http://localhost:8080/api/blog/list?isAdmin=1', // 增加一个 isAdmin=1 参数，使用登录者的用户名
                 data: {
                     author: getQueryString('author'),
                     keyword: keyword
