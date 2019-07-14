@@ -67,7 +67,14 @@
                 }),
                 success: res => {
                     console.log(res)
-                    location.href = 'index.html'
+                    if (res.errno === 0) {
+                        location.href = 'index.html'
+                    } else {
+                        alert(res.message)
+                        if (res.errno === -1) {
+                            location.href = 'login.html'
+                        }
+                    }
                 }
             })
             return false

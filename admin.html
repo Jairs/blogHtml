@@ -93,6 +93,11 @@
                         </tr>`
                         });
                         $('tbody').html(elements)
+                    } else {
+                        alert(res.message)
+                        if (res.errno === -1) {
+                            location.href = 'login.html'
+                        }
                     }
                 }
             })

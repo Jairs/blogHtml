@@ -79,7 +79,14 @@
                 }),
                 success: res => {
                     console.log(res)
-                    location.href = 'admin.html'
+                    if (res.errno === 0) {
+                        location.href = 'admin.html'
+                    } else {
+                        alert(res.message)
+                        if (res.errno === -1) {
+                            location.href = 'login.html'
+                        }
+                    }
                 }
             })
             return false
